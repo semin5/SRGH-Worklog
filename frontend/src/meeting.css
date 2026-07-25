@@ -92,3 +92,11 @@ body.dark .attendance.absent { background: #581c87; color: #f3e8ff; }
 .in-progress-row td { transition: opacity .2s ease, transform .2s ease, padding .24s ease, border-color .24s ease; }
 .table-wrap.hide-in-progress .in-progress-row { visibility: collapse; transition: visibility 0s linear .24s; }
 .table-wrap.hide-in-progress .in-progress-row td { opacity: 0; transform: translateY(-6px); padding-top: 0 !important; padding-bottom: 0 !important; border-bottom-color: transparent; }
+
+.date-tooltip .tooltip-content,
+.category-tooltip .tooltip-content,
+.requester-tooltip .tooltip-content {
+  position: fixed;
+  left: var(--tooltip-x, 0px);
+  top: var(--tooltip-y, 0px);
+}
