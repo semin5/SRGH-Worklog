@@ -1,0 +1,30 @@
+spring:
+  config:
+    import:
+      - optional:file:.env[.properties]
+  application:
+    name: worklog
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    defer-datasource-initialization: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+
+server:
+  port: 3020
+  error:
+    whitelabel:
+      enabled: false
+
+worklog:
+  pdf:
+    font-path: C:/Windows/Fonts/malgun.ttf

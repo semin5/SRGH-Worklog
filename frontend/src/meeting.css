@@ -1,0 +1,35 @@
+.attendees {
+  display: grid;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.attendee-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 10px 9px 13px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--head);
+}
+
+.attendee-name {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.attendance {
+  min-width: 55px;
+  border: 0;
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.attendance.present { background: #e0f2fe; color: #0369a1; }
+.attendance.absent { background: #f3e8ff; color: #7e22ce; }
+body.dark .attendance.present { background: #0c4a6e; color: #e0f2fe; }
+body.dark .attendance.absent { background: #581c87; color: #f3e8ff; }
