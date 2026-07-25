@@ -1,0 +1,44 @@
+.catalog-page { max-width: 1600px; margin: 0 auto; padding: 36px; color: var(--text); }
+.catalog-card { padding: 22px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+.catalog-card h2 { margin: 0 0 16px; color: var(--heading); font-size: 19px; }
+.catalog-tabs { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }
+.catalog-tabs button,.catalog-list button { border: 1px solid var(--line); border-radius: 6px; padding: 7px 10px; background: var(--surface); color: var(--text); }
+.catalog-tabs button.active { border-color: var(--blue); background: var(--head); color: var(--blue); font-weight: bold; }
+.catalog-form { display: flex; gap: 8px; margin-bottom: 14px; }
+.catalog-form input { max-width: 310px; }
+.catalog-form .primary { border: 0; border-radius: 7px; padding: 9px 14px; background: var(--blue); color: #fff; font-weight: bold; }
+.catalog-form button:not(.primary) { border: 1px solid var(--line); border-radius: 7px; padding: 9px 14px; background: var(--surface); color: var(--text); }
+.catalog-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
+.catalog-list article { display: flex; align-items: center; justify-content: space-between; gap: 9px; padding: 10px; border: 1px solid var(--line); border-radius: 7px; }
+.catalog-list article div { display: flex; gap: 5px; }
+.catalog-list article div button:last-child { color: #b91c1c; }
+.catalog-list p { margin: 0; color: var(--muted); }
+@media (max-width:700px) { .catalog-page { padding: 20px; }.catalog-form { flex-wrap: wrap; }.catalog-form input { max-width: none; }.catalog-list { grid-template-columns: 1fr; } }
+
+.catalog-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+.catalog-header h1 { margin: 0; color: var(--heading); }
+.admin-back-button { border: 1px solid var(--blue); border-radius: 7px; padding: 10px 14px; background: var(--surface); color: var(--blue); font-weight: bold; text-decoration: none; }
+.accordion-stack { display: grid; gap: 10px; }
+.admin-accordion { overflow: hidden; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); }
+.admin-accordion summary { display: flex; align-items: center; justify-content: space-between; padding: 15px 17px; color: var(--heading); font-weight: bold; cursor: pointer; list-style: none; }
+.admin-accordion summary::-webkit-details-marker { display: none; }
+.admin-accordion summary span { color: var(--blue); font-size: 18px; }
+.accordion-content { padding: 0 17px 17px; border-top: 1px solid var(--line); }
+.accordion-list { display: grid; gap: 7px; margin: 12px 0; }
+.accordion-list p { margin: 0; padding: 10px 0; color: var(--muted); font-size: 13px; }
+.accordion-list article { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 9px 10px; border: 1px solid var(--line); border-radius: 7px; }
+.accordion-list article div { display: flex; gap: 5px; }
+.accordion-list button,.accordion-add button { border: 1px solid var(--line); border-radius: 6px; padding: 7px 10px; background: var(--surface); color: var(--text); }
+.accordion-list article div button:last-child { color: #b91c1c; }
+.accordion-list .active-toggle { border-color: #0f766e; color: #0f766e; }
+.accordion-add { display: flex; gap: 7px; padding-top: 12px; border-top: 1px dashed var(--line); }
+.accordion-add input { flex: 1; max-width: none; }
+.accordion-add .primary { border: 1px solid var(--blue); background: var(--surface); color: var(--blue); font-weight: bold; }
+@media(max-width:700px) { .catalog-header { align-items: flex-start; gap: 12px; }.accordion-add { flex-wrap: wrap; }.accordion-add input { max-width: none; } }
+
+.schedule-admin-form { display: flex; flex-wrap: wrap; gap: 7px; padding-top: 12px; border-top: 1px dashed var(--line); }
+.schedule-admin-form input,.schedule-admin-form select { width: auto; min-width: 135px; }
+.schedule-admin-form input:first-child { min-width: 220px; flex: 1; }
+.schedule-admin-form button { border: 1px solid var(--line); border-radius: 6px; padding: 8px 11px; background: var(--surface); color: var(--text); }
+.schedule-admin-form .primary { border: 1px solid var(--blue); background: var(--surface); color: var(--blue); font-weight: bold; }
+@media(max-width:700px) { .schedule-admin-form input,.schedule-admin-form select,.schedule-admin-form input:first-child { width: 100%; min-width: 0; } }

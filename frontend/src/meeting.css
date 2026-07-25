@@ -33,3 +33,62 @@
 .attendance.absent { background: #f3e8ff; color: #7e22ce; }
 body.dark .attendance.present { background: #0c4a6e; color: #e0f2fe; }
 body.dark .attendance.absent { background: #581c87; color: #f3e8ff; }
+
+.create-panel .primary,
+.filter-panel .primary {
+  border: 0;
+  border-radius: 7px;
+  padding: 10px 16px;
+  background: var(--blue);
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  box-shadow: none;
+  transition: background .16s ease;
+}
+
+.create-panel .primary:hover,
+.filter-panel .primary:hover {
+  background: #1565c0;
+}
+
+.meeting-button {
+  border-radius: 7px !important;
+  padding: 10px 16px !important;
+  background: var(--blue) !important;
+  box-shadow: none !important;
+}
+
+.page > header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  padding: 14px 0 12px;
+  background: var(--bg);
+}
+
+.table-wrap { overflow: visible; }
+
+.table-wrap thead th {
+  position: sticky;
+  top: 80px;
+  z-index: 4;
+}
+
+@media (max-width: 700px) {
+  .table-wrap { overflow: auto; }
+  .table-wrap thead th { top: 72px; }
+}
+
+.create-panel .actions,
+.filter-panel .actions {
+  position: absolute;
+  right: 24px;
+  bottom: 24px;
+  margin: 0;
+}
+
+.in-progress-row { visibility: visible; transition: visibility 0s linear; }
+.in-progress-row td { transition: opacity .2s ease, transform .2s ease, padding .24s ease, border-color .24s ease; }
+.table-wrap.hide-in-progress .in-progress-row { visibility: collapse; transition: visibility 0s linear .24s; }
+.table-wrap.hide-in-progress .in-progress-row td { opacity: 0; transform: translateY(-6px); padding-top: 0 !important; padding-bottom: 0 !important; border-bottom-color: transparent; }
