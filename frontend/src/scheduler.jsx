@@ -3,7 +3,8 @@ import './quick-schedule.css'
 import './catalog.css'
 import './scheduler.css'
 
-const today = () => new Date().toISOString().slice(0, 10)
+const localDate = date => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+const today = () => localDate(new Date())
 
 export function ScheduleQuickForm() {
   const [items, setItems] = useState([])
@@ -16,7 +17,7 @@ export function ScheduleQuickForm() {
       if (!step) return start < currentMonth ? null : { ...item, date: item.start_date }
       let date = new Date(start)
       while (date < currentMonth) date = new Date(date.getFullYear(), date.getMonth() + step, Math.min(start.getDate(), new Date(date.getFullYear(), date.getMonth() + step + 1, 0).getDate()))
-      return { ...item, date: date.toISOString().slice(0, 10) }
+      return { ...item, date: localDate(date) }
     }).filter(Boolean).sort((a, b) => a.date.localeCompare(b.date))
     return occurrences.reduce((result, item) => { const month = item.date.slice(0, 7); (result[month] ||= []).push(item); return result }, {})
   }, [items])

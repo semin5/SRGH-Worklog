@@ -26,9 +26,9 @@ public class AdminCatalogService {
 
     public List<CatalogItem> list(String type) {
         return switch (type) {
-            case "majors" -> majors.findAllByOrderByNameAsc().stream().map(item -> new CatalogItem(item.getId(), item.getName(), null)).toList();
-            case "minors" -> minors.findAllByOrderByNameAsc().stream().map(item -> new CatalogItem(item.getId(), item.getName(), null)).toList();
-            case "departments" -> departments.findAllByOrderByNameAsc().stream().map(item -> new CatalogItem(item.getId(), item.getName(), null)).toList();
+            case "majors" -> majors.findAllByOrderByIdAsc().stream().map(item -> new CatalogItem(item.getId(), item.getName(), null)).toList();
+            case "minors" -> minors.findAllByOrderByIdAsc().stream().map(item -> new CatalogItem(item.getId(), item.getName(), null)).toList();
+            case "departments" -> departments.findAllByOrderByNameAsc().stream().sorted(Comparator.comparing(item -> "기타".equals(item.getName()))).map(item -> new CatalogItem(item.getId(), item.getName(), null)).toList();
             case "processors" -> processors.findAll().stream().sorted(Comparator.comparing(processor::getName)).map(item -> new CatalogItem(item.getId(), item.getName(), item.isActive())).toList();
             default -> throw new IllegalArgumentException("Unknown catalog type");
         };

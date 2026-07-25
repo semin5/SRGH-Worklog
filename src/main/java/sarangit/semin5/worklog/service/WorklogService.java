@@ -34,8 +34,8 @@ public class WorklogService {
                         .thenComparing(request::getRequest_date, Comparator.reverseOrder())
                         .thenComparing(request::getId, Comparator.reverseOrder()))
                 .toList();
-        return new WorklogPageData(items, majors.findAllByOrderByNameAsc(), minors.findAllByOrderByNameAsc(),
-                departments.findAllByOrderByNameAsc(), processors.findAll().stream().filter(p -> p.isActive()).sorted(Comparator.comparing(p -> p.getName())).toList(),
+        return new WorklogPageData(items, majors.findAllByOrderByIdAsc(), minors.findAllByOrderByIdAsc(),
+                departments.findAllByOrderByNameAsc().stream().sorted(Comparator.comparing(item -> "기타".equals(item.getName()))).toList(), processors.findAll().stream().filter(p -> p.isActive()).sorted(Comparator.comparing(p -> p.getName())).toList(),
                 majorNames, minorNames, departmentNames, processorNames);
     }
 
