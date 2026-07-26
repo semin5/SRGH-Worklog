@@ -1,6 +1,7 @@
 package sarangit.semin5.worklog.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sarangit.semin5.worklog.entity.department;
@@ -22,6 +23,7 @@ public class WorklogService {
     private final MajorCategoryRepository majors;
     private final MinorCategoryRepository minors;
     private final DepartmentRepository departments;
+    private final ApplicationEventPublisher eventPublisher;
 
     public WorklogPageData getPageData(LocalDate from, LocalDate to, Integer processorId, String keyword) {
         Map<Integer, String> majorNames = majors.findAll().stream().collect(Collectors.toMap(major_category::getId, major_category::getName));
@@ -54,6 +56,7 @@ public class WorklogService {
         item.setProcessing_date(null);
         item.setProcessing_content(null);
         requests.save(item);
+        eventPublisher.publishEvent(new WorklogChangedEvent());
     }
 
     @Transactional
@@ -67,6 +70,7 @@ public class WorklogService {
         item.setRequester(requester);
         item.setRequester_extension(extension);
         item.setRequest_content(requestContent);
+        eventPublisher.publishEvent(new WorklogChangedEvent());
     }
 
     @Transactional
@@ -75,10 +79,11 @@ public class WorklogService {
         item.setProcessor(processor);
         item.setProcessing_date(processingDate);
         item.setProcessing_content(processingContent);
+        eventPublisher.publishEvent(new WorklogChangedEvent());
     }
 
     @Transactional
-    public void delete(int id) { requests.deleteById(id); }
+    public void delete(int id) { requests.deleteById(id); eventPublisher.publishEvent(new WorklogChangedEvent()); }
 
     private boolean matches(request r, String keyword, Map<Integer, String> majorNames, Map<Integer, String> minorNames, Map<Integer, String> departmentNames) {
         if (keyword == null || keyword.isBlank()) return true;
