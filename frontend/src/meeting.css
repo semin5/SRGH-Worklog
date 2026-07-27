@@ -108,7 +108,8 @@ body.dark .requester-name { background: linear-gradient(transparent 38%, #584720
 .request-content-col,.processing-content-col { width: 28%; }
 .processor-col { width: 80px; }
 .department-col { width: 100px; }
-.request-content-col,.processing-content-col { width: 29.8%; }
+.request-content-col,.processing-content-col { width: 30.5%; }
 .table-wrap th:nth-child(3),.table-wrap td:nth-child(3) { padding-right: 2px !important; }
 .table-wrap th:nth-child(4),.table-wrap td:nth-child(4) { padding-left: 2px !important; }
+.table-wrap th:nth-child(6),.table-wrap td:nth-child(6) { padding-left: 0 !important; padding-right: 0 !important; }
 .table-wrap table { table-layout: fixed; }
