@@ -100,3 +100,15 @@ body.dark .attendance.absent { background: #581c87; color: #f3e8ff; }
   left: var(--tooltip-x, 0px);
   top: var(--tooltip-y, 0px);
 }
+
+.requester-tooltip { display: inline-flex; align-items: center; gap: 7px; }
+.department-name { color: var(--text); }
+.requester-name { display: inline-block; border-radius: 2px; padding: 0 4px; background: linear-gradient(transparent 38%, #fff4d6 38% 88%, transparent 88%); color: inherit; }
+body.dark .requester-name { background: linear-gradient(transparent 38%, #584720 38% 88%, transparent 88%); color: #fff0c2; }
+.request-content-col,.processing-content-col { width: 28%; }
+.processor-col { width: 80px; }
+.department-col { width: 100px; }
+.request-content-col,.processing-content-col { width: 29.8%; }
+.table-wrap th:nth-child(3),.table-wrap td:nth-child(3) { padding-right: 2px !important; }
+.table-wrap th:nth-child(4),.table-wrap td:nth-child(4) { padding-left: 2px !important; }
+.table-wrap table { table-layout: fixed; }
