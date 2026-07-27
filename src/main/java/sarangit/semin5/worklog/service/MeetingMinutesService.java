@@ -45,7 +45,9 @@ public class MeetingMinutesService {
     public byte[] generate(MeetingMinutes minutes) {
         try (PDDocument document = new PDDocument(); ByteArrayOutputStream output = new ByteArrayOutputStream()) {
             PDFont font = PDType0Font.load(document, new File(fontPath));
-            Page page = new Page(document, font);
+            File boldFile = new File(new File(fontPath).getParentFile(), "malgunbd.ttf");
+            PDFont boldFont = boldFile.isFile() ? PDType0Font.load(document, boldFile) : font;
+            Page page = new Page(document, font, boldFont);
             page.title("\ud68c\uc758\ub85d");
             page.section("1. \ud68c\uc758 \uac1c\uc694");
             page.overview(minutes);
@@ -90,19 +92,20 @@ public class MeetingMinutesService {
         private static final float LEFT = 36, WIDTH = 523, BOTTOM = 30;
         private final PDDocument document;
         private final PDFont font;
+        private final PDFont boldFont;
         private PDPageContentStream stream;
         private float y;
 
-        Page(PDDocument document, PDFont font) throws IOException { this.document = document; this.font = font; nextPage(); }
+        Page(PDDocument document, PDFont font, PDFont boldFont) throws IOException { this.document = document; this.font = font; this.boldFont = boldFont; nextPage(); }
 
         void title(String text) throws IOException {
-            box(LEFT, y - 34, WIDTH, 30, NAVY, NAVY);
-            centered(text, LEFT, y - 22, WIDTH, 13, Color.WHITE);
-            y -= 40;
+            box(LEFT, y - 24, WIDTH, 22, NAVY, NAVY);
+            centeredBold(text, LEFT, y - 16, WIDTH, 13, Color.WHITE);
+            y -= 30;
         }
         void section(String text) throws IOException {
             ensure(28);
-            text(text, LEFT, y - 13, 11, NAVY);
+            boldText(text, LEFT, y - 13, 11, NAVY);
             box(LEFT, y - 20, 27, 2, BLUE, BLUE);
             y -= 29;
         }
@@ -114,32 +117,32 @@ public class MeetingMinutesService {
             };
             float[] widths = {68, 193, 83, 179};
             for (String[] row : rows) {
-                float height = Math.max(22, Math.max(maxLines(row[1], widths[1] - 10, 8), maxLines(row[3], widths[3] - 10, 8)) * 10 + 8);
+                float height = Math.max(18, Math.max(maxLines(row[1], widths[1] - 10, 8), maxLines(row[3], widths[3] - 10, 8)) * 9 + 6);
                 ensure(height);
                 float x = LEFT;
                 for (int i = 0; i < row.length; i++) {
                     boolean label = i % 2 == 0;
                     box(x, y - height, widths[i], height, label ? NAVY : Color.WHITE, LINE);
-                    if (label) centered(row[i], x, y - height / 2 - 3, widths[i], 8, Color.WHITE);
-                    else cell(row[i], x + 5, y - 9, widths[i] - 10, 8, TEXT, 10);
+                    if (label) centeredBold(row[i], x, y - height / 2 - 3, widths[i], 8, Color.WHITE);
+                    else centeredCell(row[i], x + 5, y, widths[i] - 10, height, 8, TEXT, 9);
                     x += widths[i];
                 }
                 y -= height;
             }
-            y -= 11;
+            y -= 8;
         }
         void notice(String notice) throws IOException {
             List<String> lines = wrap(value(notice), WIDTH - 18, 8);
-            float height = Math.max(40, lines.size() * 10 + 12);
+            float height = Math.max(28, lines.size() * 9 + 8);
             ensure(height);
             box(LEFT, y - height, WIDTH, height, PALE, LINE);
-            cell(value(notice), LEFT + 9, y - 10, WIDTH - 18, 8, TEXT, 10);
-            y -= height + 11;
+            centeredCell(value(notice), LEFT + 9, y, WIDTH - 18, height, 8, TEXT, 9);
+            y -= height + 8;
         }
         void workHeader() throws IOException {
-            ensure(22);
+            ensure(19);
             workHeaderAt(y);
-            y -= 21;
+            y -= 19;
         }
         void emptyWork() throws IOException {
             ensure(30);
@@ -149,13 +152,13 @@ public class MeetingMinutesService {
         }
         void workRow(String[] values) throws IOException {
             float[] widths = {98, 74, 57, 143, 151};
-            float height = 24;
-            for (int i = 0; i < values.length; i++) height = Math.max(height, maxLines(values[i], widths[i] - 10, 8) * 10 + 10);
+            float height = 18;
+            for (int i = 0; i < values.length; i++) height = Math.max(height, maxLines(values[i], widths[i] - 10, 8) * 9 + 6);
             if (y - height < BOTTOM) { nextPage(); workHeader(); }
             float x = LEFT;
             for (int i = 0; i < values.length; i++) {
                 box(x, y - height, widths[i], height, Color.WHITE, LINE);
-                cell(values[i], x + 5, y - 8, widths[i] - 10, 8, TEXT, 10);
+                centeredCell(values[i], x + 5, y, widths[i] - 10, height, 8, TEXT, 9);
                 x += widths[i];
             }
             y -= height;
@@ -165,8 +168,8 @@ public class MeetingMinutesService {
             float[] widths = {98, 74, 57, 143, 151};
             float x = LEFT;
             for (int i = 0; i < headers.length; i++) {
-                box(x, top - 21, widths[i], 21, NAVY, NAVY);
-                centered(headers[i], x, top - 14, widths[i], 8, Color.WHITE);
+                box(x, top - 19, widths[i], 19, NAVY, NAVY);
+                centeredBold(headers[i], x, top - 14, widths[i], 8, Color.WHITE);
                 x += widths[i];
             }
         }
@@ -182,15 +185,32 @@ public class MeetingMinutesService {
             stream.setStrokingColor(border); stream.setLineWidth(0.65f); stream.addRect(x, bottom, width, height); stream.stroke();
         }
         private void text(String value, float x, float baseline, float size, Color color) throws IOException {
-            stream.beginText(); stream.setFont(font, size); stream.setNonStrokingColor(color); stream.newLineAtOffset(x, baseline); stream.showText(value); stream.endText();
+            write(font, value, x, baseline, size, color);
+        }
+        private void boldText(String value, float x, float baseline, float size, Color color) throws IOException { write(boldFont, value, x, baseline, size, color); }
+        private void write(PDFont typeface, String value, float x, float baseline, float size, Color color) throws IOException {
+            stream.beginText(); stream.setFont(typeface, size); stream.setNonStrokingColor(color); stream.newLineAtOffset(x, baseline); stream.showText(value); stream.endText();
         }
         private void centered(String value, float x, float baseline, float width, float size, Color color) throws IOException {
             float textWidth = font.getStringWidth(value) / 1000 * size;
             text(value, x + Math.max(4, (width - textWidth) / 2), baseline, size, color);
         }
+        private void centeredBold(String value, float x, float baseline, float width, float size, Color color) throws IOException {
+            float textWidth = boldFont.getStringWidth(value) / 1000 * size;
+            boldText(value, x + Math.max(4, (width - textWidth) / 2), baseline, size, color);
+        }
         private void cell(String value, float x, float top, float width, float size, Color color, float leading) throws IOException {
             float baseline = top;
             for (String line : wrap(value, width, size)) { text(line, x, baseline, size, color); baseline -= leading; }
+        }
+        private void centeredCell(String value, float x, float top, float width, float height, float size, Color color, float leading) throws IOException {
+            List<String> lines = wrap(value, width, size);
+            float baseline = top - height / 2 - size * .35f + (lines.size() - 1) * leading / 2;
+            for (String line : lines) {
+                float textWidth = font.getStringWidth(line) / 1000 * size;
+                text(line, x + Math.max(0, (width - textWidth) / 2), baseline, size, color);
+                baseline -= leading;
+            }
         }
         private int maxLines(String value, float width, float size) throws IOException { return wrap(value, width, size).size(); }
         private List<String> wrap(String value, float width, float size) throws IOException {
