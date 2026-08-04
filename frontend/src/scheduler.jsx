@@ -61,5 +61,5 @@ function ScheduleAccordion() {
 export function CatalogManager() {
   const [dark] = useState(() => localStorage.getItem('worklog-dark-mode') === 'true')
   useEffect(() => { document.body.classList.toggle('dark', dark) }, [dark])
-  return <main className="catalog-page"><header className="catalog-header"><div><p className="eyebrow">SRGH IT Team</p><h1>관리자</h1></div><a className="admin-back-button" href="/">메인화면으로</a></header><section className="accordion-stack"><CatalogAccordion type="majors" label="메인 카테고리"/><CatalogAccordion type="minors" label="서브 카테고리"/><CatalogAccordion type="departments" label="부서"/><CatalogAccordion type="processors" label="처리자"/><ScheduleAccordion/></section></main>
+  return <main className="catalog-page"><header className="catalog-header"><a className="catalog-brand" href="/" title="메인 화면으로 이동"><img src="/SRGH_logo.ico" alt="SRGH 로고"/><span><small>SRGH IT Team</small><h1>관리자</h1></span></a></header><section className="accordion-stack"><CatalogAccordion type="majors" label="메인 카테고리"/><CatalogAccordion type="minors" label="서브 카테고리"/><CatalogAccordion type="departments" label="부서"/><CatalogAccordion type="processors" label="처리자"/><ScheduleAccordion/></section></main>
 }

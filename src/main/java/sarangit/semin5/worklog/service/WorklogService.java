@@ -25,13 +25,14 @@ public class WorklogService {
     private final DepartmentRepository departments;
     private final ApplicationEventPublisher eventPublisher;
 
-    public WorklogPageData getPageData(LocalDate from, LocalDate to, Integer processorId, String keyword) {
+    public WorklogPageData getPageData(LocalDate from, LocalDate to, Integer processorId, String keyword,
+                                       Integer majorId, Integer minorId, Integer departmentId, String requestContent) {
         Map<Integer, String> majorNames = majors.findAll().stream().collect(Collectors.toMap(major_category::getId, major_category::getName));
         Map<Integer, String> minorNames = minors.findAll().stream().collect(Collectors.toMap(minor_category::getId, minor_category::getName));
         Map<Integer, String> departmentNames = departments.findAll().stream().collect(Collectors.toMap(department::getId, department::getName));
         Map<Integer, String> processorNames = processors.findAll().stream().collect(Collectors.toMap(p -> p.getId(), p -> p.getName()));
         List<request> items = requests.findAll().stream()
-                .filter(r -> isInProgress(r) || matchesFilters(r, from, to, processorId, keyword, majorNames, minorNames, departmentNames))
+                .filter(r -> isInProgress(r) || matchesFilters(r, from, to, processorId, keyword, majorId, minorId, departmentId, requestContent, majorNames, minorNames, departmentNames))
                 .sorted(Comparator.comparing(this::isInProgress).reversed()
                         .thenComparing(request::getRequest_date, Comparator.reverseOrder())
                         .thenComparing(request::getId, Comparator.reverseOrder()))
@@ -94,10 +95,15 @@ public class WorklogService {
     }
 
     private boolean matchesFilters(request r, LocalDate from, LocalDate to, Integer processorId, String keyword,
-                                   Map<Integer, String> majorNames, Map<Integer, String> minorNames, Map<Integer, String> departmentNames) {
+                                  Integer majorId, Integer minorId, Integer departmentId, String requestContent,
+                                  Map<Integer, String> majorNames, Map<Integer, String> minorNames, Map<Integer, String> departmentNames) {
         return (from == null || !r.getRequest_date().isBefore(from))
                 && (to == null || !r.getRequest_date().isAfter(to))
                 && (processorId == null || processorId.equals(r.getProcessor()))
+                && (majorId == null || majorId.equals(r.getMajor_category()))
+                && (minorId == null || minorId.equals(r.getMinor_category()))
+                && (departmentId == null || departmentId.equals(r.getDepartment()))
+                && (requestContent == null || requestContent.isBlank() || r.getRequest_content().toLowerCase(Locale.ROOT).contains(requestContent.toLowerCase(Locale.ROOT)))
                 && matches(r, keyword, majorNames, minorNames, departmentNames);
     }
 

@@ -5,9 +5,9 @@ spring:
   application:
     name: worklog
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: jdbc:mysql://192.168.1.252:3306/worklog?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:

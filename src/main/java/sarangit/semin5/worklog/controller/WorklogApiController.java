@@ -23,8 +23,12 @@ public class WorklogApiController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to,
             @RequestParam(required = false) Integer processor,
-            @RequestParam(required = false) String keyword) {
-        return worklogService.getPageData(from, to, processor, keyword);
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Integer major,
+            @RequestParam(required = false) Integer minor,
+            @RequestParam(required = false) Integer department,
+            @RequestParam(required = false) String requestContent) {
+        return worklogService.getPageData(from, to, processor, keyword, major, minor, department, requestContent);
     }
 
     @PostMapping
