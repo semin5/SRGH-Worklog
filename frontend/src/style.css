@@ -11,7 +11,7 @@
 :root{--sticky-header-height:39px;--sticky-status-height:40px}.status-section{top:calc(var(--sticky-title-offset) + var(--sticky-header-height))}.date-group-row td{top:calc(var(--sticky-title-offset) + var(--sticky-header-height) + var(--sticky-status-height))}.brand-title img{width:44px;height:44px;padding:0;background:transparent;border:0;box-shadow:none}.editable-cell:hover{background:transparent}tbody tr:not(.status-section):not(.date-group-row):nth-child(even) td{background:color-mix(in srgb,var(--head) 48%,var(--surface))}body.dark tbody tr:not(.status-section):not(.date-group-row):nth-child(even) td{background:#1d2d3a}.plain-progress-rows .in-progress-row td{background:transparent}.plain-progress-rows .in-progress-row:nth-child(even) td{background:color-mix(in srgb,var(--head) 48%,var(--surface))}body.dark .plain-progress-rows .in-progress-row:nth-child(even) td{background:#1d2d3a}
 .done-sticky-date{margin-left:4px;padding-left:10px;border-left:1px solid #78aaa5;color:#23645f;font-size:calc(14px * var(--text-scale))!important;font-weight:800;line-height:1}body.dark .done-sticky-date{border-color:#5f9b95;color:#b9e9e4}
 .date-group-row[data-status="done"] div{padding-left:107px}.date-group-row.merged-with-done td{height:0;padding-top:0!important;padding-bottom:0!important;border:0;opacity:0;overflow:hidden}.date-group-row.merged-with-done div{height:0;padding-top:0;padding-bottom:0;overflow:hidden}.done-sticky-date em{margin-left:5px}
-.done-section .status-heading.done{display:grid;grid-template-columns:19px max-content 1fr;gap:9px;align-items:center}.done-section .status-heading.done>.done-sticky-date{margin-left:0}.date-group-row[data-status="done"] div{padding-left:107px}table:has(.done-sticky-date) .date-group-row[data-status="done"] td{position:static;visibility:visible;box-shadow:none}#done-list{scroll-margin-top:190px}
+.done-section .status-heading.done{display:grid;grid-template-columns:19px max-content 1fr;gap:9px;align-items:center}.done-section .status-heading.done>.done-sticky-date{margin-left:0}.date-group-row[data-status="done"] div{padding-left:107px}.date-group-row[data-status="done"] td{position:static;visibility:visible;box-shadow:none}#done-list{scroll-margin-top:190px}
 .date-group-row.merged-with-done td{height:auto;padding-top:0!important;padding-bottom:0!important;border-bottom:1px solid var(--line);opacity:1;overflow:visible}.date-group-row.merged-with-done div{height:auto;padding-top:7px;padding-bottom:7px;overflow:visible}
 #latest-done-content{scroll-margin-top:161px}.brand-title h1{cursor:pointer}.column-filter:hover{color:inherit}.floating-reset-toggle{width:30px;height:30px;border:1px solid var(--line)!important;border-radius:7px!important;background:var(--surface)!important;color:var(--brand)!important;font-size:17px!important}.floating-reset-toggle:hover{background:var(--range)!important}
 .floating-font-range{width:66px;accent-color:var(--brand);cursor:pointer}.floating-body .font-control{display:none}.done-sticky-date{display:none}.done-sticky-date.visible{display:inline-block}
@@ -121,4 +121,50 @@ body.dark .date-group-row[data-status="done"] > td {
 
 body.dark .date-group-row[data-status="done"] div {
   color: #b9e9e4;
+}
+
+/* Request creation and completion actions share one clear primary style. */
+.table-toolbar .accent,
+.create-form .primary {
+  border: 1px solid #2c80b8;
+  border-radius: 8px;
+  background: #2c80b8;
+  color: #fff;
+  box-shadow: 0 3px 9px #1762912e;
+}
+
+.table-toolbar .accent:hover,
+.create-form .primary:hover {
+  background: #176f9f;
+  border-color: #176f9f;
+}
+
+body.dark .table-toolbar .accent,
+body.dark .create-form .primary {
+  background: #7bc2e9;
+  border-color: #7bc2e9;
+  color: #10202d;
+  box-shadow: 0 3px 10px #0004;
+}
+
+body.dark .table-toolbar .accent:hover,
+body.dark .create-form .primary:hover {
+  background: #9ad5f2;
+  border-color: #9ad5f2;
+}
+
+/* Floating tools stay unobtrusive until the pointer returns to them. */
+.floating-window {
+  opacity: .16;
+  transition: opacity .18s ease, box-shadow .18s ease;
+}
+
+.floating-window:hover,
+.floating-window:focus-within {
+  opacity: 1;
+}
+
+.processor-name {
+  padding: 0 4px;
+  background: linear-gradient(transparent 38%, var(--processor-highlight) 38% 88%, transparent 88%);
 }

@@ -27,18 +27,24 @@ public class WorklogService {
 
     public WorklogPageData getPageData(LocalDate from, LocalDate to, Integer processorId, String keyword,
                                        Integer majorId, Integer minorId, Integer departmentId, String requestContent) {
-        Map<Integer, String> majorNames = majors.findAll().stream().collect(Collectors.toMap(major_category::getId, major_category::getName));
-        Map<Integer, String> minorNames = minors.findAll().stream().collect(Collectors.toMap(minor_category::getId, minor_category::getName));
-        Map<Integer, String> departmentNames = departments.findAll().stream().collect(Collectors.toMap(department::getId, department::getName));
-        Map<Integer, String> processorNames = processors.findAll().stream().collect(Collectors.toMap(p -> p.getId(), p -> p.getName()));
+        List<major_category> majorItems = majors.findAllByOrderByIdAsc();
+        List<minor_category> minorItems = minors.findAllByOrderByIdAsc();
+        List<department> departmentItems = departments.findAllByOrderByNameAsc().stream()
+                .sorted(Comparator.comparing(item -> "기타".equals(item.getName()))).toList();
+        List<sarangit.semin5.worklog.entity.processor> allProcessors = processors.findAll();
+        List<sarangit.semin5.worklog.entity.processor> processorItems = allProcessors.stream()
+                .filter(p -> p.isActive()).sorted(Comparator.comparing(p -> p.getName())).toList();
+        Map<Integer, String> majorNames = majorItems.stream().collect(Collectors.toMap(major_category::getId, major_category::getName));
+        Map<Integer, String> minorNames = minorItems.stream().collect(Collectors.toMap(minor_category::getId, minor_category::getName));
+        Map<Integer, String> departmentNames = departmentItems.stream().collect(Collectors.toMap(department::getId, department::getName));
+        Map<Integer, String> processorNames = allProcessors.stream().collect(Collectors.toMap(p -> p.getId(), p -> p.getName()));
         List<request> items = requests.findAll().stream()
                 .filter(r -> isInProgress(r) || matchesFilters(r, from, to, processorId, keyword, majorId, minorId, departmentId, requestContent, majorNames, minorNames, departmentNames))
                 .sorted(Comparator.comparing(this::isInProgress).reversed()
                         .thenComparing(request::getRequest_date, Comparator.reverseOrder())
                         .thenComparing(request::getId, Comparator.reverseOrder()))
                 .toList();
-        return new WorklogPageData(items, majors.findAllByOrderByIdAsc(), minors.findAllByOrderByIdAsc(),
-                departments.findAllByOrderByNameAsc().stream().sorted(Comparator.comparing(item -> "기타".equals(item.getName()))).toList(), processors.findAll().stream().filter(p -> p.isActive()).sorted(Comparator.comparing(p -> p.getName())).toList(),
+        return new WorklogPageData(items, majorItems, minorItems, departmentItems, processorItems,
                 majorNames, minorNames, departmentNames, processorNames);
     }
 

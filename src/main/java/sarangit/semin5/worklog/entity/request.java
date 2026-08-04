@@ -14,7 +14,7 @@ import java.time.LocalDate;
 public class request {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false)
     private Instant timestamp = Instant.now();
     @Column(nullable = false)
     private LocalDate request_date;
@@ -27,6 +27,9 @@ public class request {
     @Column(nullable = false, columnDefinition = "TEXT") private String request_content;
     private Integer processor;
     @Column(columnDefinition = "TEXT") private String processing_content;
+
+    @PrePersist
+    void createTimestamp() { timestamp = Instant.now(); }
 
     @PreUpdate
     void updateTimestamp() { timestamp = Instant.now(); }
