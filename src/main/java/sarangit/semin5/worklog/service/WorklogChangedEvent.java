@@ -1,3 +1,5 @@
 package sarangit.semin5.worklog.service;
 
-public record WorklogChangedEvent() { }
+import sarangit.semin5.worklog.entity.request;
+
+public record WorklogChangedEvent(String sourceClientId, request item, Integer deletedId) { }

@@ -49,8 +49,8 @@ public class WorklogService {
     }
 
     @Transactional
-    public void create(LocalDate requestDate, String majorCategory, String minorCategory, String departmentName,
-                       String requester, String extension, String requestContent) {
+    public request create(LocalDate requestDate, String majorCategory, String minorCategory, String departmentName,
+                          String requester, String extension, String requestContent, String sourceClientId) {
         request item = new request();
         item.setRequest_date(requestDate);
         item.setMajor_category(resolveMajor(majorCategory));
@@ -62,13 +62,14 @@ public class WorklogService {
         item.setProcessor(null);
         item.setProcessing_date(null);
         item.setProcessing_content(null);
-        requests.save(item);
-        eventPublisher.publishEvent(new WorklogChangedEvent());
+        request saved = requests.save(item);
+        eventPublisher.publishEvent(new WorklogChangedEvent(sourceClientId, saved, null));
+        return saved;
     }
 
     @Transactional
-    public void updateRequest(int id, LocalDate requestDate, String majorCategory, String minorCategory, String departmentName,
-                              String requester, String extension, String requestContent) {
+    public request updateRequest(int id, LocalDate requestDate, String majorCategory, String minorCategory, String departmentName,
+                                 String requester, String extension, String requestContent, String sourceClientId) {
         request item = requests.findById(id).orElseThrow();
         item.setRequest_date(requestDate);
         item.setMajor_category(resolveMajor(majorCategory));
@@ -77,20 +78,22 @@ public class WorklogService {
         item.setRequester(requester);
         item.setRequester_extension(extension);
         item.setRequest_content(requestContent);
-        eventPublisher.publishEvent(new WorklogChangedEvent());
+        eventPublisher.publishEvent(new WorklogChangedEvent(sourceClientId, item, null));
+        return item;
     }
 
     @Transactional
-    public void updateProcessing(int id, Integer processor, LocalDate processingDate, String processingContent) {
+    public request updateProcessing(int id, Integer processor, LocalDate processingDate, String processingContent, String sourceClientId) {
         request item = requests.findById(id).orElseThrow();
         item.setProcessor(processor);
         item.setProcessing_date(processingDate);
         item.setProcessing_content(processingContent);
-        eventPublisher.publishEvent(new WorklogChangedEvent());
+        eventPublisher.publishEvent(new WorklogChangedEvent(sourceClientId, item, null));
+        return item;
     }
 
     @Transactional
-    public void delete(int id) { requests.deleteById(id); eventPublisher.publishEvent(new WorklogChangedEvent()); }
+    public void delete(int id, String sourceClientId) { requests.deleteById(id); eventPublisher.publishEvent(new WorklogChangedEvent(sourceClientId, null, id)); }
 
     private boolean matches(request r, String keyword, Map<Integer, String> majorNames, Map<Integer, String> minorNames, Map<Integer, String> departmentNames) {
         if (keyword == null || keyword.isBlank()) return true;

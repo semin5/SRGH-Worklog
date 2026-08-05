@@ -26,12 +26,12 @@ public class WorklogSseService {
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void publishAfterCommit(WorklogChangedEvent ignored) {
-        emitters.forEach(emitter -> send(emitter, "refresh"));
+        emitters.forEach(emitter -> send(emitter, ignored));
     }
 
-    private void send(SseEmitter emitter, String payload) {
+    private void send(SseEmitter emitter, Object payload) {
         try {
-            emitter.send(SseEmitter.event().name("worklog-update").data(payload, MediaType.TEXT_PLAIN));
+            emitter.send(SseEmitter.event().name("worklog-update").data(payload, MediaType.APPLICATION_JSON));
         } catch (IOException | IllegalStateException exception) {
             emitters.remove(emitter);
         }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import sarangit.semin5.worklog.entity.request;
 import sarangit.semin5.worklog.service.WorklogService;
 import sarangit.semin5.worklog.service.MeetingMinutesService;
 
@@ -33,27 +34,25 @@ public class WorklogApiController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void create(@RequestBody CreateWorklogRequest body) {
-        worklogService.create(body.request_date(), body.major_category(), body.minor_category(), body.department(),
-                body.requester(), body.requester_extension(), body.request_content());
+    public request create(@RequestBody CreateWorklogRequest body, @RequestHeader(value = "X-Worklog-Client", required = false) String clientId) {
+        return worklogService.create(body.request_date(), body.major_category(), body.minor_category(), body.department(),
+                body.requester(), body.requester_extension(), body.request_content(), clientId);
     }
 
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateRequest(@PathVariable int id, @RequestBody CreateWorklogRequest body) {
-        worklogService.updateRequest(id, body.request_date(), body.major_category(), body.minor_category(), body.department(),
-                body.requester(), body.requester_extension(), body.request_content());
+    public request updateRequest(@PathVariable int id, @RequestBody CreateWorklogRequest body, @RequestHeader(value = "X-Worklog-Client", required = false) String clientId) {
+        return worklogService.updateRequest(id, body.request_date(), body.major_category(), body.minor_category(), body.department(),
+                body.requester(), body.requester_extension(), body.request_content(), clientId);
     }
 
     @PutMapping("/{id}/processing")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateProcessing(@PathVariable int id, @RequestBody ProcessingRequest body) {
-        worklogService.updateProcessing(id, body.processor(), body.processing_date(), body.processing_content());
+    public request updateProcessing(@PathVariable int id, @RequestBody ProcessingRequest body, @RequestHeader(value = "X-Worklog-Client", required = false) String clientId) {
+        return worklogService.updateProcessing(id, body.processor(), body.processing_date(), body.processing_content(), clientId);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable int id) { worklogService.delete(id); }
+    public void delete(@PathVariable int id, @RequestHeader(value = "X-Worklog-Client", required = false) String clientId) { worklogService.delete(id, clientId); }
 
     @PostMapping(value = "/meeting-minutes/pdf", produces = "application/pdf")
     public org.springframework.http.ResponseEntity<byte[]> meetingMinutes(@RequestBody MeetingMinutesRequest body) {
