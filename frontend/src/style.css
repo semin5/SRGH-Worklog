@@ -439,6 +439,10 @@ body.dark .main-filter-controls .filters .range-button {
   box-shadow: none;
 }
 
+.content.important button {
+  font-weight: 400;
+}
+
 .settings-header-cell {
   cursor: pointer;
   color: var(--brand);
