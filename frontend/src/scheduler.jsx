@@ -6,9 +6,9 @@ import './scheduler.css'
 const localDate = date => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
 const today = () => localDate(new Date())
 
-export function ScheduleQuickForm() {
+export function ScheduleQuickForm({ onItemsChange }) {
   const [items, setItems] = useState([])
-  const load = async () => { const response = await fetch('/api/schedules/admin'); if (response.ok) setItems(await response.json()) }
+  const load = async () => { const response = await fetch('/api/schedules/admin'); if (response.ok) { const next = await response.json(); setItems(next); onItemsChange?.(next) } }
   useEffect(() => { load() }, [])
   const groups = useMemo(() => {
     const currentMonth = new Date(); currentMonth.setDate(1); currentMonth.setHours(0, 0, 0, 0)

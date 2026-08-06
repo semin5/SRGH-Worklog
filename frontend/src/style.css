@@ -443,6 +443,162 @@ body.dark .main-filter-controls .filters .range-button {
   font-weight: 400;
 }
 
+.content.editable-cell button {
+  cursor: text;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+/* Progress is intentionally distinct from the completed section. */
+.status-section:not(.done-section) td {
+  background: linear-gradient(90deg, #fff0f2, #fff8f8);
+}
+
+.status-section:not(.done-section) .status-heading {
+  color: #b4233c;
+}
+
+.status-section:not(.done-section) .status-heading em {
+  background: #d93a55;
+  color: #fff;
+}
+
+.status-icon.progress {
+  background: #ffe4e8;
+  color: #c92f4a;
+}
+
+body.dark .status-section:not(.done-section) td {
+  background: linear-gradient(90deg, #4a202b, #321c25);
+}
+
+body.dark .status-section:not(.done-section) .status-heading {
+  color: #ffbec9;
+}
+
+body.dark .status-section:not(.done-section) .status-heading em {
+  background: #ef5b74;
+  color: #281018;
+}
+
+body.dark .status-icon.progress {
+  background: #5a2633;
+  color: #ffc6d0;
+}
+
+.table-toolbar .schedule-trigger {
+  position: relative;
+  padding-right: 28px;
+}
+
+.schedule-trigger em {
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border: 2px solid var(--bg);
+  border-radius: 999px;
+  background: #df334f;
+  color: #fff;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* Use the same status palette for the left state cell, icon, and section bars. */
+.in-progress-row > td:first-child {
+  background: #fff0f2 !important;
+}
+
+.completed-row > td:first-child {
+  background: #edf8f5 !important;
+}
+
+.status-icon.progress {
+  background: #fff0f2;
+  color: #b4233c;
+}
+
+.status-icon.done {
+  background: #edf8f5;
+  color: #23645f;
+}
+
+.status-icon {
+  font-weight: 800;
+}
+
+.table-wrap thead th:not(.settings-header-cell) {
+  cursor: default;
+}
+
+.done-sticky-count:not(:empty) {
+  display: inline-block;
+  min-width: 20px;
+  min-height: 0;
+  padding: 2px 6px;
+  font-size: calc(11px * var(--text-scale));
+}
+
+.date-group-row[data-status="done"] em {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  min-height: 20px;
+  padding: 2px 7px;
+  font-size: calc(12px * var(--text-scale));
+}
+
+/* A newly hovered row during scrolling has no pointer coordinates yet. */
+:root {
+  --tooltip-x: -9999px;
+  --tooltip-y: -9999px;
+}
+
+.done-section td,
+.date-group-row[data-status="done"] > td {
+  background: #edf8f5;
+}
+
+.done-section .status-heading,
+.done-section .status-heading.done,
+.date-group-row[data-status="done"] div {
+  color: #23645f;
+}
+
+body.dark .in-progress-row > td:first-child {
+  background: #4a202b !important;
+}
+
+body.dark .completed-row > td:first-child,
+body.dark .done-section td,
+body.dark .date-group-row[data-status="done"] > td {
+  background: #1a4140 !important;
+}
+
+body.dark .status-icon.progress {
+  background: #4a202b;
+  color: #ffbec9;
+}
+
+body.dark .status-icon.done {
+  background: #1a4140;
+  color: #b9e9e4;
+}
+
+body.dark .done-section .status-heading,
+body.dark .done-section .status-heading.done,
+body.dark .date-group-row[data-status="done"] div {
+  color: #b9e9e4;
+}
+
 .settings-header-cell {
   cursor: pointer;
   color: var(--brand);

@@ -5,17 +5,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Entity
 @Table(name = "request")
 @Getter @Setter @NoArgsConstructor
 public class request {
+    private static final ZoneId KST = ZoneId.of("Asia/Seoul");
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(nullable = false)
-    private Instant timestamp = Instant.now();
+    private LocalDateTime timestamp = LocalDateTime.now(KST);
     @Column(nullable = false)
     private LocalDate request_date;
     private LocalDate processing_date;
@@ -29,8 +32,8 @@ public class request {
     @Column(columnDefinition = "TEXT") private String processing_content;
 
     @PrePersist
-    void createTimestamp() { timestamp = Instant.now(); }
+    void createTimestamp() { timestamp = LocalDateTime.now(KST); }
 
     @PreUpdate
-    void updateTimestamp() { timestamp = Instant.now(); }
+    void updateTimestamp() { timestamp = LocalDateTime.now(KST); }
 }
