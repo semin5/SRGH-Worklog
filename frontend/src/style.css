@@ -550,10 +550,10 @@ body.dark .status-icon.progress {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 24px;
-  min-height: 20px;
-  padding: 2px 7px;
-  font-size: calc(12px * var(--text-scale));
+  min-width: 20px;
+  min-height: 0;
+  padding: 2px 6px;
+  font-size: calc(11px * var(--text-scale));
 }
 
 /* A newly hovered row during scrolling has no pointer coordinates yet. */
@@ -586,6 +586,68 @@ body.dark .status-icon.progress {
   min-height: 0;
   max-height: none;
   overflow: auto;
+}
+
+.done-section .status-heading em {
+  background: #23645f;
+  color: #fff;
+}
+
+body.dark .done-section .status-heading em {
+  background: #b9e9e4;
+  color: #102b2b;
+}
+
+.date-group-row[data-status="done"] em {
+  background: #23645f;
+  color: #fff;
+}
+
+body.dark .date-group-row[data-status="done"] em {
+  background: #b9e9e4;
+  color: #102b2b;
+}
+
+/* Keep the completed-section and completed-date count badges identical. */
+.done-section .status-heading em,
+.date-group-row[data-status="done"] em {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  font-size: calc(11px * var(--text-scale));
+  line-height: 20px;
+}
+
+.date-group-row[data-status="done"] div {
+  min-height: 40px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.settings-theme-button {
+  border-color: #23645f;
+  background: #23645f;
+  color: #fff;
+}
+
+.done-section .status-heading > .done-sticky-count {
+  display: none !important;
+}
+
+.settings-theme-button {
+  border-color: var(--line);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: none;
+}
+
+.settings-theme-button:hover {
+  border-color: color-mix(in srgb, var(--brand) 38%, var(--line));
+  background: var(--head);
+  color: var(--brand-dark);
 }
 
 .done-section td,
@@ -799,4 +861,22 @@ body.dark .calendar-popover .manual-range input {
 
 .calendar-popover .manual-range input {
   text-align: center;
+}
+
+/* Match the main "맨 위로" command button in both color modes. */
+.floating-window .settings-theme-button {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: none;
+}
+
+.floating-window .settings-theme-button:hover {
+  border-color: color-mix(in srgb, var(--brand) 38%, var(--line));
+  background: var(--head);
+  color: var(--brand-dark);
+}
+
+.settings-form output {
+  color: var(--text);
 }

@@ -8,6 +8,7 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import sarangit.semin5.worklog.entity.department;
 import sarangit.semin5.worklog.entity.major_category;
@@ -22,6 +23,7 @@ import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -44,9 +46,8 @@ public class MeetingMinutesService {
 
     public byte[] generate(MeetingMinutes minutes) {
         try (PDDocument document = new PDDocument(); ByteArrayOutputStream output = new ByteArrayOutputStream()) {
-            PDFont font = PDType0Font.load(document, new File(fontPath));
-            File boldFile = new File(new File(fontPath).getParentFile(), "malgunbd.ttf");
-            PDFont boldFont = boldFile.isFile() ? PDType0Font.load(document, boldFile) : font;
+            PDFont font = loadFont(document, "malgun.ttf");
+            PDFont boldFont = loadFont(document, "malgunbd.ttf");
             Page page = new Page(document, font, boldFont);
             page.title("\ud68c\uc758\ub85d");
             page.section("1. \ud68c\uc758 \uac1c\uc694");
@@ -71,6 +72,16 @@ public class MeetingMinutesService {
             return output.toByteArray();
         } catch (IOException exception) {
             throw new IllegalStateException("PDF generation failed", exception);
+        }
+    }
+
+    private PDFont loadFont(PDDocument document, String fileName) throws IOException {
+        File configured = "malgun.ttf".equals(fileName)
+                ? new File(fontPath)
+                : new File(new File(fontPath).getParentFile(), fileName);
+        if (configured.isFile()) return PDType0Font.load(document, configured);
+        try (InputStream input = new ClassPathResource("fonts/" + fileName).getInputStream()) {
+            return PDType0Font.load(document, input);
         }
     }
 
@@ -189,15 +200,17 @@ public class MeetingMinutesService {
         }
         private void boldText(String value, float x, float baseline, float size, Color color) throws IOException { write(boldFont, value, x, baseline, size, color); }
         private void write(PDFont typeface, String value, float x, float baseline, float size, Color color) throws IOException {
-            stream.beginText(); stream.setFont(typeface, size); stream.setNonStrokingColor(color); stream.newLineAtOffset(x, baseline); stream.showText(value); stream.endText();
+            stream.beginText(); stream.setFont(typeface, size); stream.setNonStrokingColor(color); stream.newLineAtOffset(x, baseline); stream.showText(safe(typeface, value)); stream.endText();
         }
         private void centered(String value, float x, float baseline, float width, float size, Color color) throws IOException {
-            float textWidth = font.getStringWidth(value) / 1000 * size;
-            text(value, x + Math.max(4, (width - textWidth) / 2), baseline, size, color);
+            String safeValue = safe(font, value);
+            float textWidth = font.getStringWidth(safeValue) / 1000 * size;
+            text(safeValue, x + Math.max(4, (width - textWidth) / 2), baseline, size, color);
         }
         private void centeredBold(String value, float x, float baseline, float width, float size, Color color) throws IOException {
-            float textWidth = boldFont.getStringWidth(value) / 1000 * size;
-            boldText(value, x + Math.max(4, (width - textWidth) / 2), baseline, size, color);
+            String safeValue = safe(boldFont, value);
+            float textWidth = boldFont.getStringWidth(safeValue) / 1000 * size;
+            boldText(safeValue, x + Math.max(4, (width - textWidth) / 2), baseline, size, color);
         }
         private void cell(String value, float x, float top, float width, float size, Color color, float leading) throws IOException {
             float baseline = top;
@@ -207,14 +220,15 @@ public class MeetingMinutesService {
             List<String> lines = wrap(value, width, size);
             float baseline = top - height / 2 - size * .35f + (lines.size() - 1) * leading / 2;
             for (String line : lines) {
-                float textWidth = font.getStringWidth(line) / 1000 * size;
-                text(line, x + Math.max(0, (width - textWidth) / 2), baseline, size, color);
+                String safeLine = safe(font, line);
+                float textWidth = font.getStringWidth(safeLine) / 1000 * size;
+                text(safeLine, x + Math.max(0, (width - textWidth) / 2), baseline, size, color);
                 baseline -= leading;
             }
         }
         private int maxLines(String value, float width, float size) throws IOException { return wrap(value, width, size).size(); }
         private List<String> wrap(String value, float width, float size) throws IOException {
-            String source = value == null || value.isBlank() ? "-" : value;
+            String source = safe(font, value == null || value.isBlank() ? "-" : value);
             java.util.ArrayList<String> lines = new java.util.ArrayList<>();
             for (String paragraph : source.replace("\r", "").split("\n", -1)) {
                 StringBuilder line = new StringBuilder();
@@ -227,6 +241,17 @@ public class MeetingMinutesService {
                 lines.add(line.isEmpty() ? "-" : line.toString());
             }
             return lines;
+        }
+        private String safe(PDFont typeface, String value) throws IOException {
+            StringBuilder result = new StringBuilder();
+            for (int offset = 0; offset < value.length();) {
+                int codePoint = value.codePointAt(offset);
+                String character = new String(Character.toChars(codePoint));
+                try { typeface.getStringWidth(character); result.append(character); }
+                catch (IllegalArgumentException ignored) { result.append('?'); }
+                offset += Character.charCount(codePoint);
+            }
+            return result.toString();
         }
         void close() throws IOException { if (stream != null) stream.close(); }
     }
