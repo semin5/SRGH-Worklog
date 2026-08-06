@@ -877,6 +877,10 @@ body.dark .calendar-popover .manual-range input {
   color: var(--brand-dark);
 }
 
+.done-section .status-heading > .done-sticky-count:not(:empty) {
+  display: inline-flex !important;
+}
+
 .settings-form output {
   color: var(--text);
 }
