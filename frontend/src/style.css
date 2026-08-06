@@ -562,6 +562,32 @@ body.dark .status-icon.progress {
   --tooltip-y: -9999px;
 }
 
+.work-content-input {
+  height: calc(7.25em + 20px);
+  min-height: calc(7.25em + 20px);
+  overflow-y: hidden;
+  resize: none;
+  line-height: 1.45;
+}
+
+.centered-floating .floating-head {
+  cursor: default;
+}
+
+/* Every floating window remains fully visible; long forms scroll inside it. */
+.floating-window {
+  display: flex;
+  max-height: calc(100vh - 20px);
+  overflow: hidden;
+  flex-direction: column;
+}
+
+.floating-body {
+  min-height: 0;
+  max-height: none;
+  overflow: auto;
+}
+
 .done-section td,
 .date-group-row[data-status="done"] > td {
   background: #edf8f5;
