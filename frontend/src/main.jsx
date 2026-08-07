@@ -75,6 +75,33 @@ function App() {
   useEffect(() => { const stream = new EventSource('/api/events/worklogs'); const refresh = event => { if (event.data === 'connected') return; try { const update = JSON.parse(event.data); if (update.sourceClientId === clientId.current || pendingLocalMutation.current) { pendingLocalMutation.current = false; return } setData(previous => { if (!previous) return previous; if (update.deletedId != null) return { ...previous, items: previous.items.filter(item => item.id !== update.deletedId) }; const saved = update.item; return saved ? { ...previous, items: previous.items.some(item => item.id === saved.id) ? previous.items.map(item => item.id === saved.id ? saved : item) : [saved, ...previous.items] } : previous }) } catch { /* Older server events are ignored instead of causing a full reload. */ } }; stream.addEventListener('worklog-update', refresh); return () => stream.close() }, [])
   useEffect(() => { document.body.classList.toggle('dark', dark); localStorage.setItem('worklog-dark-mode', dark) }, [dark])
   useEffect(() => { localStorage.setItem('worklog-legacy-mode', legacyMode) }, [legacyMode])
+  useEffect(() => {
+    if (legacyMode) return
+    let frame = 0
+    const rows = [...document.querySelectorAll('.date-group-row[data-status="done"]')]
+    const updateDoneDate = () => {
+      const completed = document.getElementById('done-list')
+      let active = null
+      if (completed && completed.getBoundingClientRect().top <= 130) {
+        for (const row of rows) {
+          if (row.getBoundingClientRect().top <= 170) active = row
+          else break
+        }
+      }
+      const key = active ? `${active.dataset.date}-${active.dataset.count}` : ''
+      if (key === doneStickyKey.current) return
+      doneStickyKey.current = key
+      if (doneStickyLabel.current) {
+        doneStickyLabel.current.textContent = active ? `완료일 ${formatDate(active.dataset.date)}` : ''
+        doneStickyLabel.current.classList.toggle('visible', Boolean(active))
+      }
+      if (doneStickyCount.current) doneStickyCount.current.textContent = active ? active.dataset.count : ''
+    }
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(() => { frame = 0; updateDoneDate() }) }
+    updateDoneDate()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => { window.removeEventListener('scroll', onScroll); cancelAnimationFrame(frame) }
+  }, [data, legacyMode])
   useEffect(() => { document.documentElement.style.setProperty('--app-font-scale', `${fontScale / 100}`); localStorage.setItem('worklog-font-scale', String(fontScale)) }, [fontScale])
   useEffect(() => { localStorage.setItem('worklog-floating-position', JSON.stringify(floatingPosition)) }, [floatingPosition])
   useEffect(() => { const close = event => { if (event.key === 'Escape' && floating) setFloating(null) }; window.addEventListener('keydown', close); return () => window.removeEventListener('keydown', close) }, [floating])
