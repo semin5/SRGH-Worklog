@@ -884,3 +884,215 @@ body.dark .calendar-popover .manual-range input {
 .settings-form output {
   color: var(--text);
 }
+
+/* Legacy view: independent table layout, leaving the default dashboard untouched. */
+.legacy-table {
+  min-width: 1660px;
+  table-layout: auto;
+}
+
+.legacy-table th,
+.legacy-table td {
+  padding: 10px 4px;
+  font-size: calc(12px * var(--text-scale));
+  white-space: nowrap;
+}
+
+.legacy-table td:not(.legacy-actions) {
+  cursor: pointer;
+}
+
+.legacy-table .legacy-content-cell {
+  min-width: 220px;
+  max-width: 390px;
+  white-space: pre-wrap;
+  text-align: left;
+}
+
+.legacy-table .legacy-content-cell button {
+  width: 100%;
+  color: inherit;
+  cursor: text;
+  text-align: left;
+  white-space: pre-wrap;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.legacy-table .legacy-settings-header {
+  width: 42px;
+  min-width: 42px;
+  padding: 0;
+  cursor: pointer;
+  text-align: center;
+}
+
+.legacy-table .legacy-actions {
+  width: 42px;
+  min-width: 42px;
+  padding: 0;
+  cursor: default;
+  text-align: center;
+}
+
+.legacy-table .legacy-actions button {
+  min-width: 30px;
+  padding: 4px 7px;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1;
+}
+
+.legacy-table .legacy-actions button:hover {
+  color: var(--danger);
+}
+
+.legacy-table .legacy-progress td {
+  background: #fff0f2 !important;
+  color: #b4233c;
+}
+
+.legacy-table .legacy-progress .processor-name,
+.legacy-table .legacy-progress .legacy-content-cell button {
+  color: inherit;
+}
+
+body.dark .legacy-table .legacy-progress td {
+  background: #4a202b !important;
+  color: var(--text);
+}
+
+.page.legacy-mode {
+  max-width: 1790px;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.legacy-table {
+  min-width: 1740px;
+}
+
+.legacy-table th,
+.legacy-table td,
+.legacy-table .legacy-content-cell,
+.legacy-table .legacy-content-cell button {
+  text-align: center;
+}
+
+/* Keep every legacy column title, including the settings control, visible. */
+.legacy-table thead th {
+  position: sticky !important;
+  top: var(--sticky-title-offset) !important;
+  z-index: 6;
+}
+
+.legacy-table .legacy-actions,
+.legacy-table .legacy-actions button {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.legacy-table .legacy-progress td {
+  color: var(--text);
+}
+
+.legacy-table .legacy-progress:nth-child(even) td {
+  background: #f8e3e7 !important;
+}
+
+body.dark .legacy-table .legacy-progress:nth-child(even) td {
+  background: #40232d !important;
+}
+
+/* The page toolbar must cover legacy sticky headers while scrolling. */
+.legacy-mode .title-bar {
+  z-index: 10;
+}
+
+/* Reserve a larger opaque toolbar area so the legacy header never peeks through it. */
+.legacy-mode {
+  --sticky-title-offset: 82px;
+}
+
+.legacy-mode .title-bar {
+  padding-bottom: 15px;
+  box-shadow: none;
+}
+
+.legacy-table #latest-done-content {
+  scroll-margin-top: calc(var(--sticky-title-offset) + var(--sticky-header-height));
+}
+
+/* Make the delete slot part of the row instead of a visually separate button. */
+.legacy-table .legacy-actions {
+  background: var(--surface) !important;
+  border-bottom: 1px solid var(--line) !important;
+}
+
+.legacy-table .legacy-row:nth-child(even) .legacy-actions {
+  background: color-mix(in srgb, var(--head) 48%, var(--surface)) !important;
+}
+
+body.dark .legacy-table .legacy-row:nth-child(even) .legacy-actions {
+  background: #1d2d3a !important;
+}
+
+.legacy-table .legacy-progress .legacy-actions {
+  background: #fff0f2 !important;
+}
+
+.legacy-table .legacy-progress:nth-child(even) .legacy-actions {
+  background: #f8e3e7 !important;
+}
+
+body.dark .legacy-table .legacy-progress .legacy-actions {
+  background: #4a202b !important;
+}
+
+body.dark .legacy-table .legacy-progress:nth-child(even) .legacy-actions {
+  background: #40232d !important;
+}
+
+.legacy-table .legacy-actions button {
+  color: var(--text);
+}
+
+/* Reserve compact widths for metadata and split all remaining room between both contents. */
+.legacy-table {
+  table-layout: fixed;
+}
+
+.legacy-table th:nth-child(1), .legacy-table td:nth-child(1) { width: 150px; }
+.legacy-table th:nth-child(2), .legacy-table td:nth-child(2) { width: 95px; }
+.legacy-table th:nth-child(3), .legacy-table td:nth-child(3),
+.legacy-table th:nth-child(4), .legacy-table td:nth-child(4) { width: 145px; }
+.legacy-table th:nth-child(5), .legacy-table td:nth-child(5) { width: 120px; }
+.legacy-table th:nth-child(6), .legacy-table td:nth-child(6),
+.legacy-table th:nth-child(7), .legacy-table td:nth-child(7) { width: 85px; }
+.legacy-table th:nth-child(9), .legacy-table td:nth-child(9) { width: 95px; }
+.legacy-table th:nth-child(10), .legacy-table td:nth-child(10) { width: 90px; }
+.legacy-table th:nth-child(12), .legacy-table td:nth-child(12) { width: 42px; }
+.legacy-table th:nth-child(8), .legacy-table td:nth-child(8),
+.legacy-table th:nth-child(11), .legacy-table td:nth-child(11) { width: calc((100% - 1052px) / 2); }
+
+.legacy-table .legacy-content-cell {
+  max-width: none;
+}
+
+/* Keep deletion available while making the whole final cell the unobtrusive trigger. */
+.legacy-table .legacy-actions {
+  padding: 0 !important;
+  position: relative;
+}
+
+.legacy-table .legacy-actions button {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: auto;
+  min-height: 0;
+  height: auto;
+  padding: 0;
+  font-size: 0;
+}
