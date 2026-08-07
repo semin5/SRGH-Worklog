@@ -10,6 +10,7 @@ export function ScheduleQuickForm({ onItemsChange }) {
   const [items, setItems] = useState([])
   const load = async () => { const response = await fetch('/api/schedules/admin'); if (response.ok) { const next = await response.json(); setItems(next); onItemsChange?.(next) } }
   useEffect(() => { load() }, [])
+  useEffect(() => { const stream = new EventSource('/api/events/worklogs'); const refresh = () => { void load() }; stream.addEventListener('schedule-update', refresh); return () => stream.close() }, [])
   const groups = useMemo(() => {
     const currentMonth = new Date(); currentMonth.setDate(1); currentMonth.setHours(0, 0, 0, 0)
     const occurrences = items.map(item => {

@@ -1,7 +1,9 @@
 package sarangit.semin5.worklog.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import sarangit.semin5.worklog.entity.work_schedule;
 import sarangit.semin5.worklog.repository.WorkScheduleRepository;
 
@@ -14,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ScheduleService {
     private final WorkScheduleRepository schedules;
+    private final ApplicationEventPublisher eventPublisher;
 
     public MonthData month(int year, int month) {
         resetExpiredCompletions();
@@ -27,29 +30,40 @@ public class ScheduleService {
         resetExpiredCompletions();
         return schedules.findAll().stream().map(this::toData).toList();
     }
+    @Transactional
     public void create(String title, LocalDate startDate, String recurrence, Integer periodMonths) {
         work_schedule schedule = new work_schedule(); apply(schedule, title, startDate, recurrence, periodMonths); schedules.save(schedule);
+        changed();
     }
+    @Transactional
     public void update(int id, String title, LocalDate startDate, String recurrence, Integer periodMonths) {
         work_schedule schedule = schedules.findById(id).orElseThrow();
         apply(schedule, title, startDate, recurrence, periodMonths);
         schedules.save(schedule);
+        changed();
     }
-    public void delete(int id) { schedules.deleteById(id); }
+    @Transactional
+    public void delete(int id) { schedules.deleteById(id); changed(); }
+    @Transactional
     public void complete(int id) {
         work_schedule schedule = schedules.findById(id).orElseThrow();
         if (!schedule.isCompleted()) {
             schedule.setCompleted(true);
             schedule.setCompleted_date(LocalDate.now());
             schedules.save(schedule);
+            changed();
         }
     }
+    @Transactional
     public void setCompleted(int id, boolean completed) {
         work_schedule schedule = schedules.findById(id).orElseThrow();
         schedule.setCompleted(completed);
         schedule.setCompleted_date(completed ? LocalDate.now() : null);
         schedules.save(schedule);
+        changed();
     }
+
+    private void changed() { eventPublisher.publishEvent(new ScheduleChangedEvent()); }
 
     private void apply(work_schedule schedule, String title, LocalDate startDate, String recurrence, Integer periodMonths) {
         schedule.setTitle(title); schedule.setStart_date(startDate); schedule.setRecurrence(periodMonths != null && periodMonths > 0 ? "MONTHLY" : (recurrence == null || recurrence.isBlank() ? "NONE" : recurrence)); schedule.setPeriod_months(periodMonths != null && periodMonths > 0 ? periodMonths : null);

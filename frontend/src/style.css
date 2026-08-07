@@ -948,7 +948,7 @@ body.dark .calendar-popover .manual-range input {
 }
 
 .legacy-table .legacy-progress td {
-  background: #fff0f2 !important;
+  background: #f2d3da !important;
   color: #b4233c;
 }
 
@@ -958,7 +958,7 @@ body.dark .calendar-popover .manual-range input {
 }
 
 body.dark .legacy-table .legacy-progress td {
-  background: #4a202b !important;
+  background: #753244 !important;
   color: var(--text);
 }
 
@@ -998,11 +998,11 @@ body.dark .legacy-table .legacy-progress td {
 }
 
 .legacy-table .legacy-progress:nth-child(even) td {
-  background: #f8e3e7 !important;
+  background: #e9bec8 !important;
 }
 
 body.dark .legacy-table .legacy-progress:nth-child(even) td {
-  background: #40232d !important;
+  background: #632c3b !important;
 }
 
 /* The page toolbar must cover legacy sticky headers while scrolling. */
@@ -1039,19 +1039,19 @@ body.dark .legacy-table .legacy-row:nth-child(even) .legacy-actions {
 }
 
 .legacy-table .legacy-progress .legacy-actions {
-  background: #fff0f2 !important;
+  background: #f2d3da !important;
 }
 
 .legacy-table .legacy-progress:nth-child(even) .legacy-actions {
-  background: #f8e3e7 !important;
+  background: #e9bec8 !important;
 }
 
 body.dark .legacy-table .legacy-progress .legacy-actions {
-  background: #4a202b !important;
+  background: #753244 !important;
 }
 
 body.dark .legacy-table .legacy-progress:nth-child(even) .legacy-actions {
-  background: #40232d !important;
+  background: #632c3b !important;
 }
 
 .legacy-table .legacy-actions button {
@@ -1095,4 +1095,24 @@ body.dark .legacy-table .legacy-progress:nth-child(even) .legacy-actions {
   height: auto;
   padding: 0;
   font-size: 0;
+}
+
+/* Use the assigned processor color across the full legacy processor cell. */
+.legacy-table td:nth-child(10) {
+  position: relative;
+  padding: 0 !important;
+}
+
+.legacy-table td:nth-child(10) .processor-name {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: none;
+  background: var(--processor-highlight) !important;
+  border-radius: 0;
+  color: #fff !important;
+  font-weight: 700;
 }
