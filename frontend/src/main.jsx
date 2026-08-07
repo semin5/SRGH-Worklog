@@ -169,7 +169,9 @@ function WorklogRow({ id, item, data, dark, onRequest, onProcessing, onRemove })
 function LegacyTable({ items, data, dark, onRequest, onProcessing, onRemove, onSettings }) {
   useEffect(() => {
     const row = document.querySelector('.legacy-table .legacy-done')
+    const timestampHeader = document.querySelector('.legacy-table thead th:first-child')
     if (row) row.id = 'latest-done-content'
+    if (timestampHeader) timestampHeader.dataset.progressCount = String(items.filter(item => !item.processing_date).length)
     return () => { if (row?.id === 'latest-done-content') row.removeAttribute('id') }
   }, [items])
   return <table className="legacy-table"><thead><tr><th>타임스탬프</th><th>요청 날짜</th><th>메인 카테고리</th><th>서브 카테고리</th><th>부서</th><th>요청자</th><th>내선 번호</th><th>요청 내용</th><th>처리 날짜</th><th>처리자</th><th>처리 내용</th><th className="settings-header-cell legacy-settings-header" onClick={onSettings} title="화면 설정" aria-label="화면 설정">⚙</th></tr></thead><tbody>{items.map(item => <LegacyRow key={item.id} item={item} data={data} dark={dark} onRequest={onRequest} onProcessing={onProcessing} onRemove={onRemove}/>)}</tbody></table>

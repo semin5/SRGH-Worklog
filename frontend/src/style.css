@@ -1063,18 +1063,18 @@ body.dark .legacy-table .legacy-progress:nth-child(even) .legacy-actions {
   table-layout: fixed;
 }
 
-.legacy-table th:nth-child(1), .legacy-table td:nth-child(1) { width: 150px; }
-.legacy-table th:nth-child(2), .legacy-table td:nth-child(2) { width: 95px; }
+.legacy-table th:nth-child(1), .legacy-table td:nth-child(1) { width: 125px; }
+.legacy-table th:nth-child(2), .legacy-table td:nth-child(2) { width: 80px; }
 .legacy-table th:nth-child(3), .legacy-table td:nth-child(3),
-.legacy-table th:nth-child(4), .legacy-table td:nth-child(4) { width: 145px; }
-.legacy-table th:nth-child(5), .legacy-table td:nth-child(5) { width: 120px; }
+.legacy-table th:nth-child(4), .legacy-table td:nth-child(4) { width: 130px; }
+.legacy-table th:nth-child(5), .legacy-table td:nth-child(5) { width: 105px; }
 .legacy-table th:nth-child(6), .legacy-table td:nth-child(6),
-.legacy-table th:nth-child(7), .legacy-table td:nth-child(7) { width: 85px; }
-.legacy-table th:nth-child(9), .legacy-table td:nth-child(9) { width: 95px; }
-.legacy-table th:nth-child(10), .legacy-table td:nth-child(10) { width: 90px; }
-.legacy-table th:nth-child(12), .legacy-table td:nth-child(12) { width: 42px; }
+.legacy-table th:nth-child(7), .legacy-table td:nth-child(7) { width: 70px; }
+.legacy-table th:nth-child(9), .legacy-table td:nth-child(9) { width: 80px; }
+.legacy-table th:nth-child(10), .legacy-table td:nth-child(10) { width: 70px; }
+.legacy-table th:nth-child(12), .legacy-table td:nth-child(12) { width: 35px; }
 .legacy-table th:nth-child(8), .legacy-table td:nth-child(8),
-.legacy-table th:nth-child(11), .legacy-table td:nth-child(11) { width: calc((100% - 1052px) / 2); }
+.legacy-table th:nth-child(11), .legacy-table td:nth-child(11) { width: calc((100% - 895px) / 2); }
 
 .legacy-table .legacy-content-cell {
   max-width: none;
@@ -1115,4 +1115,34 @@ body.dark .legacy-table .legacy-progress:nth-child(even) .legacy-actions {
   border-radius: 0;
   color: #fff !important;
   font-weight: 700;
+}
+
+.legacy-table thead th:first-child {
+  position: sticky;
+  padding-left: 30px;
+}
+
+.legacy-table thead th:first-child::before {
+  content: attr(data-progress-count);
+  position: absolute;
+  left: 6px;
+  top: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  transform: translateY(-50%);
+  border-radius: 999px;
+  background: #b4233c;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+body.dark .legacy-table thead th:first-child::before {
+  background: #d85773;
+  color: #fff;
 }
